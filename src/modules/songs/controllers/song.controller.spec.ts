@@ -1,5 +1,5 @@
 import { SongController } from '#modules/index'
-import { SongModel } from '#modules/songs/models'
+import { LyricsModel, SongModel } from '#modules/songs/models'
 import { beforeAll, describe, expect, it } from 'vitest'
 import type { z } from 'zod'
 
@@ -25,6 +25,13 @@ describe('SongController', () => {
 
     const { data } = (await response.json()) as { data: z.infer<typeof SongModel>[] }
     expect(() => SongModel.parse(data[0])).not.toThrow()
+  })
+
+  it('retrieve lyrics for a song', async () => {
+    const response = await searchController.controller.request('/songs/ddQaeUpV/lyrics')
+
+    const { data } = (await response.json()) as { data: z.infer<typeof LyricsModel> }
+    expect(() => LyricsModel.parse(data)).not.toThrow()
   })
 
   // it('retrieve song suggestions', async () => {
